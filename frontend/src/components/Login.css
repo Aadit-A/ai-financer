@@ -1,0 +1,89 @@
+.wireframe-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 1rem;
+}
+
+.wireframe-box {
+  background: white;
+  border: 2px dashed #333;
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  font-family: monospace;
+}
+
+.login-wireframe {
+  text-align: center;
+}
+
+.wireframe-header h1 {
+  margin: 0 0 2rem 0;
+  color: #333;
+  font-size: 1.5rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+}
+
+.wireframe-section {
+  margin: 2rem 0;
+}
+
+.wireframe-input {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  border: 1px dashed #666;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+.wireframe-input label {
+  color: #666;
+  font-weight: normal;
+}
+
+.wireframe-button {
+  margin: 1.5rem 0;
+  padding: 0.75rem 2rem;
+  border: 2px solid #007bff;
+  background-color: #e7f3ff;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #007bff;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.wireframe-button:hover {
+  background-color: #cce7ff;
+}
+
+.wireframe-notes {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #fff3cd;
+  border: 1px dashed #856404;
+  border-radius: 4px;
+  text-align: left;
+}
+
+.wireframe-notes h3 {
+  margin: 0 0 0.5rem 0;
+  color: #856404;
+  font-size: 1rem;
+}
+
+.wireframe-notes ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.wireframe-notes li {
+  color: #856404;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
