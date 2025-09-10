@@ -1,84 +1,104 @@
+import { useState } from 'react';
+import IncomeExpenseForm from './IncomeExpenseForm';
 import './Dashboard.css';
 
 const Dashboard = ({ onLogout }) => {
+  const [transactions, setTransactions] = useState([]);
+  const [savingsGoal, setSavingsGoal] = useState(5000);
+
+  const addTransaction = (transaction) => {
+    setTransactions([...transactions, { ...transaction, id: Date.now() }]);
+  };
+
+  const calculateTotals = () => {
+    const income = transactions
+      .filter(t => t.type === 'income')
+      .reduce((sum, t) => sum + t.amount, 0);
+    
+    const expenses = transactions
+      .filter(t => t.type === 'expense')
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    return { income, expenses, balance: income - expenses };
+  };
+
+  const { income, expenses, balance } = calculateTotals();
+  const savingsProgress = (balance / savingsGoal) * 100;
+
   return (
-    <div className="wireframe-container">
-      <div className="wireframe-box dashboard-wireframe">
-        <div className="wireframe-header">
-          <h1>AI Finance Advisor - Dashboard</h1>
-          <div className="wireframe-button" onClick={onLogout}>
-            [Logout Button]
+    <div className="dashboard">
+      <header className="dashboard-header">
+        <h1>AI Finance Advisor Dashboard</h1>
+        <button onClick={onLogout} className="logout-btn">Logout</button>
+      </header>
+
+      <div className="dashboard-content">
+        <div className="stats-grid">
+          <div className="stat-card income">
+            <h3>Total Income</h3>
+            <p className="amount">${income.toFixed(2)}</p>
+          </div>
+          
+          <div className="stat-card expenses">
+            <h3>Total Expenses</h3>
+            <p className="amount">${expenses.toFixed(2)}</p>
+          </div>
+          
+          <div className="stat-card balance">
+            <h3>Current Balance</h3>
+            <p className="amount">${balance.toFixed(2)}</p>
           </div>
         </div>
 
-        <div className="wireframe-grid">
-          <div className="wireframe-card income-card">
-            <h3>[Income Card]</h3>
-            <div className="wireframe-amount">$XXX.XX</div>
-            <p>Total monthly income</p>
+        <div className="savings-goal">
+          <h3>Savings Goal Progress</h3>
+          <div className="goal-info">
+            <span>Goal: ${savingsGoal}</span>
+            <span>Progress: {savingsProgress.toFixed(1)}%</span>
           </div>
-
-          <div className="wireframe-card expense-card">
-            <h3>[Expense Card]</h3>
-            <div className="wireframe-amount">$XXX.XX</div>
-            <p>Total monthly expenses</p>
+          <div className="progress-bar">
+            <div 
+              className="progress-fill" 
+              style={{ width: `${Math.min(savingsProgress, 100)}%` }}
+            ></div>
           </div>
-
-          <div className="wireframe-card balance-card">
-            <h3>[Balance Card]</h3>
-            <div className="wireframe-amount">$XXX.XX</div>
-            <p>Current balance</p>
-          </div>
-        </div>
-
-        <div className="wireframe-section">
-          <div className="wireframe-card savings-card">
-            <h3>[Savings Goal Progress]</h3>
-            <div className="wireframe-progress-bar">
-              <div className="wireframe-progress-fill"></div>
-            </div>
-            <p>XX% of $X,XXX goal reached</p>
+          <div className="goal-input">
+            <label>
+              Update Goal: 
+              <input
+                type="number"
+                value={savingsGoal}
+                onChange={(e) => setSavingsGoal(Number(e.target.value))}
+                min="0"
+                step="100"
+              />
+            </label>
           </div>
         </div>
 
-        <div className="wireframe-section">
-          <div className="wireframe-card form-card">
-            <h3>[Add Income/Expense Form]</h3>
-            <div className="wireframe-form-row">
-              <div className="wireframe-input">[Type Dropdown]</div>
-              <div className="wireframe-input">[Amount Input]</div>
-            </div>
-            <div className="wireframe-form-row">
-              <div className="wireframe-input">[Category Dropdown]</div>
-              <div className="wireframe-input">[Description Input]</div>
-            </div>
-            <div className="wireframe-button">[Add Transaction Button]</div>
-          </div>
+        <div className="forms-section">
+          <IncomeExpenseForm onAddTransaction={addTransaction} />
         </div>
 
-        <div className="wireframe-section">
-          <div className="wireframe-card transactions-card">
-            <h3>[Recent Transactions]</h3>
-            <div className="wireframe-transaction">
-              <span>[Transaction 1]</span> <span>[+$XXX.XX]</span>
+        <div className="transactions-list">
+          <h3>Recent Transactions</h3>
+          {transactions.length === 0 ? (
+            <p className="no-transactions">No transactions yet. Add some income or expenses above!</p>
+          ) : (
+            <div className="transactions">
+              {transactions.slice(-10).reverse().map(transaction => (
+                <div key={transaction.id} className={`transaction ${transaction.type}`}>
+                  <div className="transaction-info">
+                    <span className="description">{transaction.description}</span>
+                    <span className="category">{transaction.category}</span>
+                  </div>
+                  <span className="amount">
+                    {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                  </span>
+                </div>
+              ))}
             </div>
-            <div className="wireframe-transaction">
-              <span>[Transaction 2]</span> <span>[-$XXX.XX]</span>
-            </div>
-            <div className="wireframe-transaction">
-              <span>[Transaction 3]</span> <span>[+$XXX.XX]</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="wireframe-notes">
-          <h3>Dashboard Wireframe Notes:</h3>
-          <p>Main financial overview with key metrics</p>
-          <p>Income, Expenses, Balance cards in grid layout</p>
-          <p>Savings goal with visual progress bar</p>
-          <p>Form to add new transactions</p>
-          <p>Recent transactions list</p>
-          <p>Responsive design for mobile/desktop</p>
+          )}
         </div>
       </div>
     </div>

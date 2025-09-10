@@ -1,89 +1,64 @@
-.wireframe-container {
+.login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f8f9fa;
-  padding: 1rem;
+  background-color: #f5f5f5;
 }
 
-.wireframe-box {
+.login-form {
   background: white;
-  border: 2px dashed #333;
-  border-radius: 8px;
   padding: 2rem;
-  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  font-family: monospace;
+  max-width: 400px;
 }
 
-.login-wireframe {
+.login-form h2 {
   text-align: center;
-}
-
-.wireframe-header h1 {
-  margin: 0 0 2rem 0;
+  margin-bottom: 2rem;
   color: #333;
-  font-size: 1.5rem;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 1rem;
 }
 
-.wireframe-section {
-  margin: 2rem 0;
+.form-group {
+  margin-bottom: 1rem;
 }
 
-.wireframe-input {
-  margin: 1rem 0;
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
   padding: 0.75rem;
-  border: 1px dashed #666;
-  background-color: #f9f9f9;
+  border: 1px solid #ddd;
   border-radius: 4px;
-}
-
-.wireframe-input label {
-  color: #666;
-  font-weight: normal;
-}
-
-.wireframe-button {
-  margin: 1.5rem 0;
-  padding: 0.75rem 2rem;
-  border: 2px solid #007bff;
-  background-color: #e7f3ff;
-  border-radius: 4px;
-  cursor: pointer;
-  color: #007bff;
-  font-weight: bold;
-  display: inline-block;
-}
-
-.wireframe-button:hover {
-  background-color: #cce7ff;
-}
-
-.wireframe-notes {
-  margin-top: 2rem;
-  padding: 1rem;
-  background-color: #fff3cd;
-  border: 1px dashed #856404;
-  border-radius: 4px;
-  text-align: left;
-}
-
-.wireframe-notes h3 {
-  margin: 0 0 0.5rem 0;
-  color: #856404;
   font-size: 1rem;
+  box-sizing: border-box;
 }
 
-.wireframe-notes ul {
-  margin: 0;
-  padding-left: 1rem;
+.form-group input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
-.wireframe-notes li {
-  color: #856404;
-  font-size: 0.9rem;
-  margin: 0.25rem 0;
+.login-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-btn:hover {
+  background-color: #0056b3;
 }
