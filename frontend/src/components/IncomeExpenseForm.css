@@ -1,13 +1,63 @@
 .income-expense-form {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: var(--bg-card);
+  padding: 1.75rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.income-expense-form:hover {
+  border-color: var(--purple-primary);
 }
 
 .income-expense-form h3 {
-  margin: 0 0 1.5rem 0;
-  color: #333;
+  margin: 0 0 1.25rem 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.quick-templates {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.templates-label {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.template-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.template-btn {
+  padding: 0.5rem 0.9rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.template-btn:hover {
+  background: var(--purple-primary);
+  border-color: var(--purple-primary);
+  color: white;
+  transform: translateY(-1px);
 }
 
 .form-row {
@@ -23,60 +73,115 @@
 }
 
 .form-group label {
-  margin-bottom: 0.5rem;
-  color: #555;
+  margin-bottom: 0.6rem;
+  color: var(--text-secondary);
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .form-group input,
 .form-group select {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.form-group select {
+  cursor: pointer;
+}
+
+.form-group select option {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.form-group input::placeholder {
+  color: var(--text-muted);
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  border-color: var(--purple-primary);
+  background: var(--bg-primary);
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.help-text {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  opacity: 0.8;
 }
 
 .submit-btn {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.85rem;
   border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: 500;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
   margin-top: 1rem;
 }
 
 .submit-btn.income {
-  background-color: #28a745;
+  background: var(--success);
   color: white;
 }
 
 .submit-btn.income:hover {
-  background-color: #218838;
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+.submit-btn.income:active {
+  transform: translateY(0);
 }
 
 .submit-btn.expense {
-  background-color: #dc3545;
+  background: var(--danger);
   color: white;
 }
 
 .submit-btn.expense:hover {
-  background-color: #c82333;
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+.submit-btn.expense:active {
+  transform: translateY(0);
+}
+
+/* Light Mode Adjustments */
+.light-mode .income-expense-form {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .income-expense-form:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.light-mode .template-btn:hover {
+  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.2);
 }
 
 @media (max-width: 768px) {
   .form-row {
     grid-template-columns: 1fr;
+  }
+  
+  .income-expense-form {
+    padding: 1.5rem;
   }
 }

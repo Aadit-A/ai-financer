@@ -1,16 +1,41 @@
 import { useState } from 'react';
 import './IncomeExpenseForm.css';
 
-const IncomeExpenseForm = ({ onAddTransaction }) => {
+const IncomeExpenseForm = ({ onAddTransaction, savingsGoals = [] }) => {
   const [formData, setFormData] = useState({
     type: 'income',
     amount: '',
     description: '',
-    category: ''
+    category: '',
+    linkedGoalId: ''
   });
 
   const incomeCategories = ['Salary', 'Freelance', 'Business', 'Investment', 'Other'];
   const expenseCategories = ['Food', 'Transportation', 'Housing', 'Entertainment', 'Healthcare', 'Shopping', 'Other'];
+
+  // Quick templates for common transactions
+  const quickTemplates = {
+    income: [
+      { description: 'Monthly Salary', category: 'Salary', icon: '💰' },
+      { description: 'Freelance Work', category: 'Freelance', icon: '💼' },
+      { description: 'Investment Return', category: 'Investment', icon: '📈' },
+    ],
+    expense: [
+      { description: 'Groceries', category: 'Food', icon: '🛒' },
+      { description: 'Gas/Fuel', category: 'Transportation', icon: '⛽' },
+      { description: 'Rent/Mortgage', category: 'Housing', icon: '🏠' },
+      { description: 'Dining Out', category: 'Food', icon: '🍽️' },
+      { description: 'Shopping', category: 'Shopping', icon: '🛍️' },
+    ]
+  };
+
+  const applyTemplate = (template) => {
+    setFormData(prev => ({
+      ...prev,
+      description: template.description,
+      category: template.category
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,7 +61,8 @@ const IncomeExpenseForm = ({ onAddTransaction }) => {
       type: 'income',
       amount: '',
       description: '',
-      category: ''
+      category: '',
+      linkedGoalId: ''
     });
   };
 
@@ -45,16 +71,36 @@ const IncomeExpenseForm = ({ onAddTransaction }) => {
     setFormData(prev => ({
       ...prev,
       [name]: value,
-      // Reset category when type changes
-      ...(name === 'type' ? { category: '' } : {})
+      // Reset category and linkedGoalId when type changes
+      ...(name === 'type' ? { category: '', linkedGoalId: '' } : {})
     }));
   };
 
   const categories = formData.type === 'income' ? incomeCategories : expenseCategories;
+  const templates = quickTemplates[formData.type] || [];
 
   return (
     <div className="income-expense-form">
       <h3>Add Income/Expense</h3>
+      
+      {/* Quick Templates */}
+      <div className="quick-templates">
+        <span className="templates-label">Quick Add:</span>
+        <div className="template-buttons">
+          {templates.map((template, idx) => (
+            <button
+              key={idx}
+              type="button"
+              className="template-btn"
+              onClick={() => applyTemplate(template)}
+              title={template.description}
+            >
+              {template.icon} {template.description}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <form onSubmit={handleSubmit}>
         <div className="form-row">
           <div className="form-group">
@@ -119,6 +165,34 @@ const IncomeExpenseForm = ({ onAddTransaction }) => {
             />
           </div>
         </div>
+
+        {savingsGoals.length > 0 && (
+          <div className="form-row">
+            <div className="form-group full-width">
+              <label htmlFor="linkedGoalId">
+                🎯 Link to Savings Goal (Optional):
+              </label>
+              <select
+                id="linkedGoalId"
+                name="linkedGoalId"
+                value={formData.linkedGoalId}
+                onChange={handleChange}
+              >
+                <option value="">None - Don't link to any goal</option>
+                {savingsGoals
+                  .filter(goal => goal.currentAmount < goal.targetAmount)
+                  .map(goal => (
+                    <option key={goal.id} value={goal.id}>
+                      {goal.icon || '🎯'} {goal.name} (${goal.currentAmount.toFixed(2)} / ${goal.targetAmount})
+                    </option>
+                  ))}
+              </select>
+              <small className="help-text">
+                Link this transaction to contribute the full amount to your goal
+              </small>
+            </div>
+          </div>
+        )}
 
         <button type="submit" className={`submit-btn ${formData.type}`}>
           Add {formData.type === 'income' ? 'Income' : 'Expense'}
