@@ -1196,6 +1196,21 @@
   text-overflow: ellipsis;
 }
 
+.ai-reason-note {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.1));
+  color: #f59e0b;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  margin-top: 0.2rem;
+  width: fit-content;
+  max-width: 400px;
+  line-height: 1.4;
+}
+
 .transaction .category {
   font-size: 0.8rem;
   color: var(--text-muted);

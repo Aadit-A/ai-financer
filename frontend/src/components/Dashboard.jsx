@@ -93,7 +93,9 @@ Consider:
 
 ${customContext ? 'Pay special attention to the additional context provided above when making your decision.' : ''}
 
-Reply with ONLY one word: either "Necessary" or "Unnecessary"`;
+Reply in this EXACT format:
+Classification: [Necessary or Unnecessary]
+Reason: [Brief explanation in one sentence why this expense is necessary or unnecessary]`;
 
       console.log('Sending request to:', apiUrl);
       
@@ -130,18 +132,30 @@ Reply with ONLY one word: either "Necessary" or "Unnecessary"`;
       const aiResponse = data.candidates[0].content.parts[0].text.trim();
       console.log('AI Classification:', aiResponse);
       
-      const lowerResponse = aiResponse.toLowerCase();
-      if (lowerResponse.includes('necessary') && !lowerResponse.includes('unnecessary')) {
-        return 'Necessary';
-      } else if (lowerResponse.includes('unnecessary')) {
-        return 'Unnecessary';
+      const classificationMatch = aiResponse.match(/Classification:\s*(Necessary|Unnecessary)/i);
+      const reasonMatch = aiResponse.match(/Reason:\s*(.+?)(?:\n|$)/i);
+      
+      const classification = classificationMatch ? classificationMatch[1] : null;
+      const reason = reasonMatch ? reasonMatch[1].trim() : 'No reason provided';
+      
+      if (classification) {
+        return {
+          classification: classification.charAt(0).toUpperCase() + classification.slice(1).toLowerCase(),
+          reason: reason
+        };
       } else {
         console.log('Could not determine classification from:', aiResponse);
-        return 'Unknown';
+        return {
+          classification: 'Unknown',
+          reason: 'Unable to analyze'
+        };
       }
     } catch (error) {
       console.error('AI Analysis Error (caught):', error);
-      return 'Unknown';
+      return {
+        classification: 'Unknown',
+        reason: 'Analysis failed'
+      };
     }
   };
 
@@ -162,13 +176,15 @@ Reply with ONLY one word: either "Necessary" or "Unnecessary"`;
           transaction.customContext || ''
         );
         console.log('AI Analysis complete:', aiAnalysis);
-        newTransaction.aiAnalysis = aiAnalysis;
+        newTransaction.aiAnalysis = aiAnalysis.classification;
+        newTransaction.aiReason = aiAnalysis.reason;
         if (transaction.customContext) {
           newTransaction.aiContext = transaction.customContext;
         }
       } catch (error) {
         console.error('Error during AI analysis:', error);
         newTransaction.aiAnalysis = 'Unknown';
+        newTransaction.aiReason = 'Analysis failed';
       } finally {
         setIsAnalyzing(false);
       }
@@ -968,9 +984,14 @@ Reply with ONLY one word: either "Necessary" or "Unnecessary"`;
                           {transaction.aiAnalysis && transaction.type === 'expense' && (
                             <span 
                               className={`ai-analysis-badge ${transaction.aiAnalysis.toLowerCase()}`}
-                              title={transaction.aiContext ? `AI Analysis - Context: ${transaction.aiContext}` : "AI Analysis"}
+                              title={transaction.aiReason || 'AI Analysis'}
                             >
                               🤖 {transaction.aiAnalysis}
+                            </span>
+                          )}
+                          {transaction.aiReason && transaction.type === 'expense' && (
+                            <span className="ai-reason-note" title="AI's reasoning">
+                              💡 {transaction.aiReason}
                             </span>
                           )}
                           {transaction.aiContext && (
