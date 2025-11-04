@@ -7,8 +7,10 @@ const IncomeExpenseForm = ({ onAddTransaction, savingsGoals = [] }) => {
     amount: '',
     description: '',
     category: '',
-    linkedGoalId: ''
+    linkedGoalId: '',
+    context: 'Not Applicable'
   });
+  const [showContextInput, setShowContextInput] = useState(false);
 
   const incomeCategories = ['Salary', 'Freelance', 'Business', 'Investment', 'Other'];
   const expenseCategories = ['Food', 'Transportation', 'Housing', 'Entertainment', 'Healthcare', 'Shopping', 'Other'];
@@ -62,8 +64,10 @@ const IncomeExpenseForm = ({ onAddTransaction, savingsGoals = [] }) => {
       amount: '',
       description: '',
       category: '',
-      linkedGoalId: ''
+      linkedGoalId: '',
+      context: 'Not Applicable'
     });
+    setShowContextInput(false);
   };
 
   const handleChange = (e) => {
@@ -71,9 +75,14 @@ const IncomeExpenseForm = ({ onAddTransaction, savingsGoals = [] }) => {
     setFormData(prev => ({
       ...prev,
       [name]: value,
-      // Reset category and linkedGoalId when type changes
-      ...(name === 'type' ? { category: '', linkedGoalId: '' } : {})
+      ...(name === 'type' ? { category: '', linkedGoalId: '', context: 'Not Applicable' } : {})
     }));
+    
+    if (name === 'context' && value === 'Custom') {
+      setShowContextInput(true);
+    } else if (name === 'context' && value === 'Not Applicable') {
+      setShowContextInput(false);
+    }
   };
 
   const categories = formData.type === 'income' ? incomeCategories : expenseCategories;
@@ -165,6 +174,49 @@ const IncomeExpenseForm = ({ onAddTransaction, savingsGoals = [] }) => {
             />
           </div>
         </div>
+
+        {formData.type === 'expense' && (
+          <div className="form-row">
+            <div className="form-group full-width">
+              <label htmlFor="context">
+                🤖 AI Analysis Context (Optional):
+              </label>
+              <select
+                id="context"
+                name="context"
+                value={formData.context}
+                onChange={handleChange}
+              >
+                <option value="Not Applicable">Not Applicable - Basic expense</option>
+                <option value="Custom">Provide Custom Context</option>
+              </select>
+              <small className="help-text">
+                Add context to help AI better classify this expense
+              </small>
+            </div>
+          </div>
+        )}
+
+        {formData.type === 'expense' && showContextInput && (
+          <div className="form-row">
+            <div className="form-group full-width">
+              <label htmlFor="customContext">
+                📝 Additional Context:
+              </label>
+              <textarea
+                id="customContext"
+                name="customContext"
+                value={formData.customContext || ''}
+                onChange={handleChange}
+                placeholder="e.g., 'Emergency car repair', 'Birthday gift for family', 'Business meeting dinner', etc."
+                rows="2"
+              />
+              <small className="help-text">
+                Explain why you made this expense to improve AI accuracy
+              </small>
+            </div>
+          </div>
+        )}
 
         {savingsGoals.length > 0 && (
           <div className="form-row">

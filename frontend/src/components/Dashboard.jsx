@@ -35,10 +35,10 @@ const Dashboard = ({ onLogout }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('darkMode');
-    return saved ? JSON.parse(saved) : true; // Default to dark mode
+    return saved ? JSON.parse(saved) : true;
   });
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-  // Save to localStorage whenever data changes
   useEffect(() => {
     localStorage.setItem('transactions', JSON.stringify(transactions));
   }, [transactions]);
@@ -67,11 +67,116 @@ const Dashboard = ({ onLogout }) => {
     setDarkMode(!darkMode);
   };
 
-  const addTransaction = (transaction) => {
+  const analyzeExpenseWithAI = async (description, category, amount, context = 'Not Applicable', customContext = '') => {
+    try {
+      console.log('Starting AI analysis...', { description, category, amount, context, customContext });
+      
+      const apiKey = 'AIzaSyASdxTnAJ_vXJ5VZnFzc88rS7A3Zv6OxEE';
+      const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+      
+      let contextInfo = '';
+      if (context === 'Custom' && customContext) {
+        contextInfo = `\nAdditional Context: ${customContext}`;
+      }
+      
+      const prompt = `Analyze this expense and determine if it's "Necessary" or "Unnecessary":
+
+Description: ${description}
+Category: ${category}
+Amount: $${amount}${contextInfo}
+
+Consider:
+- Essential needs (food, housing, healthcare, transportation, medical emergencies) = Necessary
+- Luxury items, entertainment, non-essential shopping, excessive spending = Unnecessary
+- Context is important: emergencies, work-related, or family obligations may make expenses necessary
+- One-time reasonable purchases vs frequent unnecessary spending
+
+${customContext ? 'Pay special attention to the additional context provided above when making your decision.' : ''}
+
+Reply with ONLY one word: either "Necessary" or "Unnecessary"`;
+
+      console.log('Sending request to:', apiUrl);
+      
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: prompt
+            }]
+          }]
+        })
+      });
+
+      console.log('Response status:', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error:', response.status, response.statusText, errorText);
+        return 'Unknown';
+      }
+
+      const data = await response.json();
+      console.log('Full API Response:', JSON.stringify(data, null, 2));
+      
+      if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+        console.error('Unexpected API response structure:', data);
+        return 'Unknown';
+      }
+      
+      const aiResponse = data.candidates[0].content.parts[0].text.trim();
+      console.log('AI Classification:', aiResponse);
+      
+      const lowerResponse = aiResponse.toLowerCase();
+      if (lowerResponse.includes('necessary') && !lowerResponse.includes('unnecessary')) {
+        return 'Necessary';
+      } else if (lowerResponse.includes('unnecessary')) {
+        return 'Unnecessary';
+      } else {
+        console.log('Could not determine classification from:', aiResponse);
+        return 'Unknown';
+      }
+    } catch (error) {
+      console.error('AI Analysis Error (caught):', error);
+      return 'Unknown';
+    }
+  };
+
+  const addTransaction = async (transaction) => {
+    console.log('Adding transaction:', transaction);
     const newTransaction = { ...transaction, id: Date.now() };
+    
+    if (transaction.type === 'expense') {
+      console.log('This is an expense, starting AI analysis...');
+      setIsAnalyzing(true);
+      
+      try {
+        const aiAnalysis = await analyzeExpenseWithAI(
+          transaction.description,
+          transaction.category,
+          transaction.amount,
+          transaction.context || 'Not Applicable',
+          transaction.customContext || ''
+        );
+        console.log('AI Analysis complete:', aiAnalysis);
+        newTransaction.aiAnalysis = aiAnalysis;
+        if (transaction.customContext) {
+          newTransaction.aiContext = transaction.customContext;
+        }
+      } catch (error) {
+        console.error('Error during AI analysis:', error);
+        newTransaction.aiAnalysis = 'Unknown';
+      } finally {
+        setIsAnalyzing(false);
+      }
+    }
+    
+    console.log('Adding transaction to state:', newTransaction);
     setTransactions([...transactions, newTransaction]);
     
-    // Update linked savings goal with the exact transaction amount
     if (transaction.linkedGoalId && transaction.linkedGoalId !== '') {
       updateGoalAmount(transaction.linkedGoalId, Number(transaction.amount));
     }
@@ -461,6 +566,12 @@ const Dashboard = ({ onLogout }) => {
       </header>
 
       <div className="dashboard-content">
+        {isAnalyzing && (
+          <div className="ai-analyzing-banner">
+            <span>🤖 AI is analyzing your expense... Please wait</span>
+          </div>
+        )}
+        
         {lastDeleted && (
           <div className="undo-banner">
             <span>Transaction deleted</span>
@@ -852,6 +963,19 @@ const Dashboard = ({ onLogout }) => {
                           {transaction.linkedGoalId && (
                             <span className="goal-link-badge" title="Linked to savings goal">
                               🎯 {savingsGoals.find(g => g.id === transaction.linkedGoalId)?.name}
+                            </span>
+                          )}
+                          {transaction.aiAnalysis && transaction.type === 'expense' && (
+                            <span 
+                              className={`ai-analysis-badge ${transaction.aiAnalysis.toLowerCase()}`}
+                              title={transaction.aiContext ? `AI Analysis - Context: ${transaction.aiContext}` : "AI Analysis"}
+                            >
+                              🤖 {transaction.aiAnalysis}
+                            </span>
+                          )}
+                          {transaction.aiContext && (
+                            <span className="ai-context-note" title="User provided context">
+                              📝 {transaction.aiContext}
                             </span>
                           )}
                         </span>
