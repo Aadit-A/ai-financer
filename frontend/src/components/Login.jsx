@@ -17,6 +17,11 @@ const Login = ({ onLogin }) => {
 
   return (
     <div className="login-container">
+      <div className="login-particles" aria-hidden="true">
+        {Array.from({ length: 18 }).map((_, index) => (
+          <span key={index} className={`particle particle-${index + 1}`} />
+        ))}
+      </div>
       <div className="login-form">
         <h2>AI Finance Advisor</h2>
         <form onSubmit={handleSubmit}>

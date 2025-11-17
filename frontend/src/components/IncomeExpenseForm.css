@@ -1,14 +1,17 @@
 .income-expense-form {
-  background: var(--bg-card);
-  padding: 1.75rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--border-color);
-  transition: all 0.2s ease;
+  background: rgba(139, 92, 246, 0.08);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  padding: 2rem;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .income-expense-form:hover {
-  border-color: var(--purple-primary);
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 12px 48px rgba(139, 92, 246, 0.4);
 }
 
 .income-expense-form h3 {
@@ -20,10 +23,10 @@
 
 .quick-templates {
   margin-bottom: 1.5rem;
-  padding: 1rem;
-  background: var(--bg-secondary);
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
+  padding: 1.25rem;
+  background: rgba(139, 92, 246, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(139, 92, 246, 0.15);
 }
 
 .templates-label {
@@ -41,23 +44,25 @@
 }
 
 .template-btn {
-  padding: 0.5rem 0.9rem;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  background: rgba(139, 92, 246, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
   color: var(--text-secondary);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
   font-weight: 500;
 }
 
 .template-btn:hover {
-  background: var(--purple-primary);
+  background: rgba(139, 92, 246, 0.15);
   border-color: var(--purple-primary);
-  color: white;
-  transform: translateY(-1px);
+  color: var(--purple-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
 }
 
 .form-row {
@@ -82,19 +87,20 @@
 .form-group input,
 .form-group select,
 .form-group textarea {
-  padding: 0.75rem 0.9rem;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
   font-size: 0.95rem;
-  transition: all 0.2s ease;
-  background: var(--bg-secondary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(139, 92, 246, 0.05);
+  backdrop-filter: blur(20px);
   color: var(--text-primary);
   font-family: inherit;
 }
 
 .form-group textarea {
   resize: vertical;
-  min-height: 60px;
+  min-height: 70px;
 }
 
 .form-group select {
@@ -102,13 +108,13 @@
 }
 
 .form-group select option {
-  background: var(--bg-card);
+  background: rgba(10, 15, 31, 0.98);
   color: var(--text-primary);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .form-group input:focus,
@@ -116,7 +122,8 @@
 .form-group textarea:focus {
   outline: none;
   border-color: var(--purple-primary);
-  background: var(--bg-primary);
+  background: rgba(139, 92, 246, 0.1);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
 }
 
 .form-group.full-width {
@@ -134,24 +141,43 @@
 
 .submit-btn {
   width: 100%;
-  padding: 0.85rem;
+  padding: 1rem;
   border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
+  border-radius: 16px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.submit-btn:hover::before {
+  left: 100%;
 }
 
 .submit-btn.income {
-  background: var(--success);
+  background: linear-gradient(135deg, var(--neon-mint), var(--neon-cyan));
   color: white;
 }
 
 .submit-btn.income:hover {
-  background: #059669;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(0, 255, 175, 0.4);
 }
 
 .submit-btn.income:active {
@@ -159,13 +185,13 @@
 }
 
 .submit-btn.expense {
-  background: var(--danger);
+  background: linear-gradient(135deg, var(--soft-red), var(--neon-purple));
   color: white;
 }
 
 .submit-btn.expense:hover {
-  background: #dc2626;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(255, 83, 112, 0.4);
 }
 
 .submit-btn.expense:active {

@@ -1,25 +1,34 @@
 import { useState } from 'react'
+import LandingPage from './components/LandingPage'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
 import './App.css'
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [currentPage, setCurrentPage] = useState('landing') // 'landing', 'login', 'dashboard'
+
+  const handleGetStarted = () => {
+    setCurrentPage('login')
+  }
 
   const handleLogin = () => {
-    setIsLoggedIn(true)
+    setCurrentPage('dashboard')
   }
 
   const handleLogout = () => {
-    setIsLoggedIn(false)
+    setCurrentPage('landing')
   }
 
   return (
     <div className="app">
-      {isLoggedIn ? (
-        <Dashboard onLogout={handleLogout} />
-      ) : (
+      {currentPage === 'landing' && (
+        <LandingPage onGetStarted={handleGetStarted} />
+      )}
+      {currentPage === 'login' && (
         <Login onLogin={handleLogin} />
+      )}
+      {currentPage === 'dashboard' && (
+        <Dashboard onLogout={handleLogout} />
       )}
     </div>
   )

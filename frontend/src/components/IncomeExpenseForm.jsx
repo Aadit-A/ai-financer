@@ -197,7 +197,29 @@ const IncomeExpenseForm = ({ onAddTransaction, savingsGoals = [] }) => {
           </div>
         )}
 
-        {formData.type === 'expense' && showContextInput && (
+        {formData.type === 'income' && (
+          <div className="form-row">
+            <div className="form-group full-width">
+              <label htmlFor="context">
+                🤖 AI Context (Optional):
+              </label>
+              <select
+                id="context"
+                name="context"
+                value={formData.context}
+                onChange={handleChange}
+              >
+                <option value="Not Applicable">Not Applicable - Regular income</option>
+                <option value="Custom">Provide Custom Context</option>
+              </select>
+              <small className="help-text">
+                Add context to get personalized AI recommendations
+              </small>
+            </div>
+          </div>
+        )}
+
+        {((formData.type === 'expense' && showContextInput) || (formData.type === 'income' && showContextInput)) && (
           <div className="form-row">
             <div className="form-group full-width">
               <label htmlFor="customContext">
@@ -208,11 +230,15 @@ const IncomeExpenseForm = ({ onAddTransaction, savingsGoals = [] }) => {
                 name="customContext"
                 value={formData.customContext || ''}
                 onChange={handleChange}
-                placeholder="e.g., 'Emergency car repair', 'Birthday gift for family', 'Business meeting dinner', etc."
+                placeholder={formData.type === 'income' 
+                  ? "e.g., 'Bonus from project completion', 'Freelance client payment', 'Side hustle earnings', etc."
+                  : "e.g., 'Emergency car repair', 'Birthday gift for family', 'Business meeting dinner', etc."}
                 rows="2"
               />
               <small className="help-text">
-                Explain why you made this expense to improve AI accuracy
+                {formData.type === 'income' 
+                  ? 'Explain the source or nature of this income for better AI recommendations'
+                  : 'Explain why you made this expense to improve AI accuracy'}
               </small>
             </div>
           </div>
