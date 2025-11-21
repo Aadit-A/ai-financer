@@ -1,12 +1,15 @@
-# React + Vite
+# AI Finance Advisor - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend for the AI Finance Advisor application. It provides the user interface for managing personal finances.
 
-Currently, two official plugins are available:
+## What it is
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The frontend is a web application that allows users to interact with the AI Finance Advisor. It includes the dashboard, forms for adding transactions, and views for tracking savings goals.
 
-## Expanding the ESLint configuration
+## What it does
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Dashboard:** Displays an overview of the user's financial status, including income, expenses, and balance.
+- **Transaction Management:** Allows users to add, view, and manage their income and expense records.
+- **AI Interaction:** Sends expense data to the AI for analysis and displays the results.
+- **Savings Goals:** Provides tools to create, track, and manage savings goals.
+- **Data Visualization:** Shows financial data through charts and lists to help users understand their spending.
