@@ -237,7 +237,7 @@ const Dashboard = ({ onLogout }) => {
     try {
       console.log('Starting AI analysis...', { description, category, amount, context, customContext });
       
-      const apiKey = 'AIzaSyBj3Q0dmVw4koicgAO6xiq0Ky3Z2zb-UqE';
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
       
       let contextInfo = '';
@@ -327,7 +327,7 @@ Reason: [Brief explanation in one sentence why this expense is necessary or unne
 
   const generateTransactionRecommendation = async (type, description, category, amount, context = 'Not Applicable', customContext = '') => {
     try {
-      const apiKey = 'AIzaSyBj3Q0dmVw4koicgAO6xiq0Ky3Z2zb-UqE';
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
       
       let contextInfo = '';
@@ -417,7 +417,7 @@ Be specific, personalized, and actionable. Focus on smart allocation, saving str
   const getAIRecommendations = async () => {
     setIsLoadingRecommendations(true);
     try {
-      const apiKey = 'AIzaSyBj3Q0dmVw4koicgAO6xiq0Ky3Z2zb-UqE';
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
       
       // Prepare transaction summary
