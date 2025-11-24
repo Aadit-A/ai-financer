@@ -1,4 +1,4 @@
-# AI Finance Advisor - Frontend
+`# AI Finance Advisor - Frontend
 
 This is the frontend for the AI Finance Advisor application. It provides the user interface for managing personal finances.
 
