@@ -384,7 +384,13 @@ Be specific, personalized, and actionable. Focus on smart allocation, saving str
       });
 
       if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
+        const errorData = await response.json().catch(() => ({}));
+        console.error('API Error Details:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData
+        });
+        throw new Error(`API request failed with status ${response.status}: ${errorData.error?.message || response.statusText}`);
       }
 
       const data = await response.json();
